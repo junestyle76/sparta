@@ -1,0 +1,18 @@
+/*
+[2025.10.14] added.
+- https://noonnu.cc/font_page/950  
+*/
+
+@font-face {
+    font-family: 'PyeongchangPeace';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-02@1.0/PyeongChangPeace-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'PyeongchangPeace';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-02@1.0/PyeongChangPeace-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-display: swap;
+}

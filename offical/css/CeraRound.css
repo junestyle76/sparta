@@ -1,0 +1,30 @@
+@font-face {
+    font-family: 'Cera Round Pro DEMO';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Cera Round Pro DEMO'), url('https://fonts.cdnfonts.com/s/96099/CeraRoundProDEMORegular.woff') format('woff');
+}
+@font-face {
+    font-family: 'Cera Round Pro DEMO';
+    font-style: normal;
+    font-weight: 250;
+    src: local('Cera Round Pro DEMO'), url('https://fonts.cdnfonts.com/s/96099/CeraRoundProDEMOThin.woff') format('woff');
+}
+@font-face {
+    font-family: 'Cera Round Pro DEMO';
+    font-style: normal;
+    font-weight: 300;
+    src: local('Cera Round Pro DEMO'), url('https://fonts.cdnfonts.com/s/96099/CeraRoundProDEMOLight.woff') format('woff');
+}
+@font-face {
+    font-family: 'Cera Round Pro DEMO';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Cera Round Pro DEMO'), url('https://fonts.cdnfonts.com/s/96099/CeraRoundProDEMOBold.woff') format('woff');
+}
+@font-face {
+    font-family: 'Cera Round Pro DEMO';
+    font-style: normal;
+    font-weight: 900;
+    src: local('Cera Round Pro DEMO'), url('https://fonts.cdnfonts.com/s/96099/CeraRoundProDEMOBlack.woff') format('woff');
+}

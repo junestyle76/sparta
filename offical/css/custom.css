@@ -1,0 +1,238 @@
+/* custom 
+  [2025.10.14] added.
+  [2025.03] added 
+  -> [2025.10.14] fixed "PyeongchangPeace"
+*/
+
+.CeraRound {
+    /*display: block;*/
+    font-family: "Cera Round Pro DEMO", Verdana, Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    font-weight: 700;
+    /* font-size: 2em */
+}
+
+.CeraRoundTitle {
+    /* display: block; */
+    font-family: "Cera Round Pro DEMO", Verdana, Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 2em
+}
+
+.PyeongchangPeace {
+  font-family: 'PyeongchangPeace', Verdana, Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  overflow-x: hidden
+}
+
+.PyeongchangPeaceHeader {
+    font-family: "PyeongchangPeace", Verdana, Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    font-weight: 700
+}
+
+.PyeongchangPeaceTitle {
+    display: block;
+    font-family: "PyeongchangPeace", Verdana, Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 2em
+}
+
+/* TAG */
+body {
+  FONT-FAMILY: "Pretendard", Verdana;
+  FONT-SIZE: 11pt;
+  /*
+  scrollbar-face-color: #cccccc;
+  scrollbar-arrow-color: #ffffff;
+  scrollbar-track-color: #ffffff;
+  scrollbar-highlight-color: #ffffff;
+  scrollbar-shadow-color: #ffffff;
+  scrollbar-darkshadow-color: #ffffff;
+  scrollbar-3dlight-color: #ffffff;
+  */
+  scrollbar-face-color: #cccccc;
+  scrollbar-arrow-color: #ffffff;
+  scrollbar-track-color: #ededed;
+  scrollbar-highlight-color: #ededed;
+  scrollbar-shadow-color: #ededed;
+  scrollbar-darkshadow-color: #ededed;
+  scrollbar-3dlight-color: #ededed;
+}
+
+input {
+  FONT-SIZE: 11pt;
+  color: #555555;
+  border: 1 solid #cccccc;
+}
+
+select {
+  font-size: 11px;
+  color: #555555;
+  border: 1 solid #cccccc;
+}
+
+textarea {
+  FONT-SIZE: 11pt;
+  color: #555555;
+  border: 1 solid #cccccc;
+}
+
+td {
+  /*font-family: "PyeongchangPeace", "Pretendard", Verdana;*/
+  FONT-SIZE: 11pt;
+  color: #666666
+}
+
+td.hidden {
+  display: none;
+}
+
+td.collapse {
+  visibility: collapse;
+}
+
+/*
+font {
+  FONT-SIZE: 11pt;
+}
+
+li {
+  FONT-SIZE: 11pt;
+}
+
+b {
+  COLOR: darkslategray;
+  FONT-SIZE: 11pt;
+}
+*/
+.box1 {
+  FONT-SIZE: 11pt;
+  color: #555555;
+  border: 0;
+}
+
+.box2 {
+  FONT-SIZE: 11pt;
+  color: #555555;
+  border: 1 solid #ededed;
+}
+
+.f16 {
+  font-size: 16pt
+}
+
+.f14 {
+  font-size: 14pt
+}
+
+.f13 {
+  font-size: 13pt
+}
+
+.f8 {
+  font-size: 8pt
+}
+
+A:link {
+  COLOR: #708090;
+  /* FONT-FAMILY: Pretendard;
+  FONT-SIZE: 11pt; */
+  TEXT-DECORATION: none
+}
+
+A:visited {
+  COLOR: #708090;
+  /* FONT-FAMILY: Pretendard;
+  FONT-SIZE: 11pt; */
+  TEXT-DECORATION: none
+}
+
+A:hover {
+  COLOR: #3399ff;
+  /* FONT-FAMILY: Pretendard;
+  FONT-SIZE: 11pt; */
+  TEXT-DECORATION: underline
+}
+
+A:active {
+  COLOR: #3399ff;
+  /* FONT-FAMILY: Pretendard;
+  FONT-SIZE: 11pt; */
+  TEXT-DECORATION: underline
+}
+
+.a2:link {
+  COLOR: darkslategray;
+  /* FONT-FAMILY: Pretendard, Verdana;
+  FONT-SIZE: 11pt; */
+  TEXT-DECORATION: none
+}
+
+.a2:visited {
+  COLOR: darkslategray;
+  /* FONT-FAMILY: Pretendard;
+  FONT-SIZE: 11pt; */
+  TEXT-DECORATION: none
+}
+
+.a2:hover {
+  COLOR: #3399ff;
+  /* FONT-FAMILY: Pretendard;
+  FONT-SIZE: 11pt; */
+  TEXT-DECORATION: none
+}
+
+.a2:active {
+  COLOR: #3399ff;
+  /* FONT-FAMILY: Pretendard;
+  FONT-SIZE: 11pt; */
+  TEXT-DECORATION: none
+}
+
+.a3:link {
+  COLOR: darkmagenta;
+  TEXT-DECORATION: underline
+}
+
+.a3:visited {
+  COLOR: darkmagenta;
+  TEXT-DECORATION: underline
+}
+
+.a3:hover {
+  COLOR: #3399ff;
+  TEXT-DECORATION: underline
+}
+
+.a3:active {
+  COLOR: #3399ff;
+  TEXT-DECORATION: underline
+}
+
+.customTitle:link {
+  COLOR: darkslategray;
+  TEXT-DECORATION: none
+}
+
+.customTitle:visited {
+  COLOR: darkslategray;
+  TEXT-DECORATION: none
+}
+
+.customTitle:hover {
+  COLOR: #3399ff;
+  TEXT-DECORATION: none
+}
+
+.customTitle:active {
+  COLOR: #3399ff;
+  TEXT-DECORATION: none
+}
+
+.subTitle {
+  font-family: "PyeongchangPeace", "Pretendard", Verdana;
+  FONT-SIZE: 11pt;
+  font-weight: 700;
+}

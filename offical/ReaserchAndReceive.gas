@@ -1,0 +1,42 @@
+// Google Apps Script 파일
+// 폼 데이터가 POST 방식으로 전송될 때 이 함수가 실행됩니다.
+function doPost(e) {
+  try {
+    var data = e.parameter; // 폼 데이터 가져오기
+    var name = data.name;
+    var gender = data.gender;
+    var age = data.age;
+    var contact = data.contact;
+    var email = data.email;
+    var message = data.message;
+
+    // 이메일 수신 주소
+    var recipientEmail = "abc@gmail.com"; // <--- 이 부분을 원하시는 이메일 주소로 변경!
+
+    // 이메일 제목과 본문 구성
+    var subject = "[사용자문의] " + name;
+    var body = "이름: " + name + "\n"
+             + "성별: " + gender + "\n"
+             + "연령대: " + age + "\n"
+             + "연락처: " + email + "\n"
+             + "이메일: " + contact + "\n\n"
+             + "메시지:\n" + message;
+
+    // 이메일 보내기
+    // GmailApp을 사용하면 Gmail 계정에서 보낼 수 있으며, 보내는 사람 주소를 설정할 수 있습니다.
+    // MailApp을 사용하면 스크립트를 실행하는 계정으로 보냅니다.
+    // 여기서는 GmailApp을 사용하겠습니다. 스크립트 실행 시 Gmail 권한 요청이 있을 수 있습니다.
+    GmailApp.sendEmail(recipientEmail, subject, body, {
+      replyTo: email // 답장 주소를 사용자가 입력한 이메일로 설정
+    });
+
+    // 성공 응답 반환 (JSON 형식)
+    return ContentService.createTextOutput(JSON.stringify({ result: 'success' }))
+      .setMimeType(ContentService.MimeType.JSON);
+
+  } catch(error) {
+    // 오류 발생 시 오류 응답 반환
+    return ContentService.createTextOutput(JSON.stringify({ result: 'error', error: error.message }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
