@@ -1,0 +1,67 @@
+<!-- 플립 스타일 시계 웹 버전 화면 구조 (상단 날짜 / 중단 시각 / 하단 타이머) -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FlipClock</title>
+  <link rel="icon" href="../pine_256.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <p class="date" id="date">—</p>
+
+    <!-- 카드 6장 + 콜론 2개는 app.js 가 만든다 -->
+    <div class="clock" id="clock"></div>
+
+    <div class="divider"></div>
+
+    <div class="timer">
+      <span class="timer-caption">TIMER</span>
+      <span class="timer-value" id="timer">00:50:00</span>
+    </div>
+
+    <div class="buttons">
+      <button type="button" id="btn-start">▶ 시작</button>
+      <button type="button" id="btn-reset">↺ 리셋</button>
+      <button type="button" id="btn-settings">⚙ 설정</button>
+    </div>
+  </main>
+
+  <dialog class="settings" id="settings">
+    <form id="settings-form" method="dialog">
+      <p class="hint">타이머 시간을 입력하세요 (최대 365일).</p>
+
+      <div class="fields">
+        <label>
+          <input type="number" id="f-days" min="0" max="365" step="1" inputmode="numeric">
+          <span>일</span>
+        </label>
+        <label>
+          <input type="number" id="f-hours" min="0" max="23" step="1" inputmode="numeric">
+          <span>시</span>
+        </label>
+        <label>
+          <input type="number" id="f-minutes" min="0" max="59" step="1" inputmode="numeric">
+          <span>분</span>
+        </label>
+        <label>
+          <input type="number" id="f-seconds" min="0" max="59" step="1" inputmode="numeric">
+          <span>초</span>
+        </label>
+      </div>
+
+      <p class="error" id="settings-error"></p>
+
+      <div class="dialog-buttons">
+        <button type="submit">저장</button>
+        <button type="button" id="btn-cancel">취소</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="timer_core.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

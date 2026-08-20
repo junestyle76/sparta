@@ -1,0 +1,243 @@
+/* 플립 카드 배색과 접힘 애니메이션. 색·크기는 파이썬 버전(flip_card.py, flip_clock.py)과 같은 값을 쓴다 */
+:root {
+  --bg: #141414;
+  --card-top: #2f2f2f;
+  --card-bottom: #262626;
+  --divider: #141414;
+  --text: #f5f5f5;
+  --muted: #8a8a8a;
+  --btn: #2f2f2f;
+  --btn-active: #3f3f3f;
+  --alert: #e05252;
+
+  --card-w: 78px;
+  --card-h: 112px;
+  --card-font: 62px;
+  --gap: 2px;
+  --flip-ms: 130ms; /* 접힘 + 펼침 = 260ms */
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Malgun Gothic', 'Segoe UI', sans-serif;
+  user-select: none;
+}
+
+.app {
+  padding: 18px 22px;
+  text-align: center;
+}
+
+.date {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 20px;
+}
+
+.clock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.colon {
+  padding: 0 4px;
+  font: 700 34px/1 Consolas, 'Courier New', monospace;
+}
+
+/* ---------- 플립 카드 ---------- */
+
+.card {
+  position: relative;
+  width: var(--card-w);
+  height: var(--card-h);
+  margin: 0 3px;
+  perspective: 500px;
+  font: 700 var(--card-font) / var(--card-h) Consolas, 'Courier New', monospace;
+}
+
+.card .half,
+.card .flap {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: calc((var(--card-h) - var(--gap)) / 2);
+  overflow: hidden;              /* 숫자를 반쪽 경계에서 잘라낸다 */
+  backface-visibility: hidden;
+}
+
+.card .upper,
+.card .flap-front {
+  top: 0;
+  background: var(--card-top);
+  border-radius: 6px 6px 0 0;
+}
+
+.card .lower,
+.card .flap-back {
+  bottom: 0;
+  background: var(--card-bottom);
+  border-radius: 0 0 6px 6px;
+}
+
+/* 숫자의 세로 중심을 카드 전체 높이의 절반에 맞춘다 (위/아래 반쪽 모두 동일) */
+.card .half span,
+.card .flap span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: var(--card-h);
+  text-align: center;
+}
+
+.card .upper span,
+.card .flap-front span { top: 0; }
+
+.card .lower span,
+.card .flap-back span { bottom: 0; }
+
+/* 전환 조각: 평소에는 앞쪽만 펼쳐져 있고 뒤쪽은 접혀 숨어 있다 */
+.card .flap-front { transform: rotateX(0deg); transform-origin: bottom; }
+.card .flap-back { transform: rotateX(90deg); transform-origin: top; }
+
+.card.flipping .flap-front { animation: flip-down var(--flip-ms) ease-in forwards; }
+.card.flipping .flap-back { animation: flip-up var(--flip-ms) var(--flip-ms) ease-out forwards; }
+
+@keyframes flip-down {
+  from { transform: rotateX(0deg); }
+  to { transform: rotateX(-90deg); }
+}
+
+@keyframes flip-up {
+  from { transform: rotateX(90deg); }
+  to { transform: rotateX(0deg); }
+}
+
+/* ---------- 타이머 ---------- */
+
+.divider {
+  height: 1px;
+  margin: 20px 0 0;
+  background: var(--card-top);
+}
+
+.timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 14px 0 4px;
+}
+
+.timer-caption {
+  color: var(--muted);
+  font: 700 13px/1 Consolas, 'Courier New', monospace;
+}
+
+.timer-value {
+  font: 700 28px/1 Consolas, 'Courier New', monospace;
+}
+
+.timer-value.done { animation: blink 600ms steps(1, end) 5; }
+
+@keyframes blink {
+  0%, 49% { color: var(--alert); }
+  50%, 100% { color: var(--text); }
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+button {
+  min-width: 96px;
+  padding: 7px 12px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--btn);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+button:hover { background: var(--btn-active); }
+button:active { transform: translateY(1px); }
+button:focus-visible { outline: 2px solid var(--muted); outline-offset: 2px; }
+
+/* ---------- 설정 창 ---------- */
+
+.settings {
+  border: 0;
+  border-radius: 6px;
+  padding: 16px;
+  background: #1a1a1a;
+  color: var(--text);
+}
+
+.settings::backdrop { background: rgba(0, 0, 0, 0.55); }
+
+.settings .hint {
+  margin: 0 0 12px;
+  font-size: 14px;
+}
+
+.settings .fields {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.settings label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.settings input {
+  width: 64px;
+  padding: 5px;
+  border: 0;
+  border-radius: 3px;
+  background: var(--btn);
+  color: var(--text);
+  font: 700 16px/1 Consolas, 'Courier New', monospace;
+  text-align: center;
+}
+
+.settings .error {
+  min-height: 19px;
+  margin: 10px 0 0;
+  color: var(--alert);
+  font-size: 13px;
+  max-width: 320px;
+}
+
+.settings .dialog-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.settings .dialog-buttons button { min-width: 76px; }
+
+/* 애니메이션을 줄이도록 설정한 환경에서는 카드 전환 효과를 끈다 */
+@media (prefers-reduced-motion: reduce) {
+  .card.flipping .flap-front,
+  .card.flipping .flap-back { animation-duration: 1ms; }
+  .timer-value.done { animation-iteration-count: 3; }
+}
