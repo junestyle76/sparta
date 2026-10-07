@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>대한민국 공휴일 캘린더</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Song+Myung&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --paper:#EBEFF3;
+    --panel:#F7F8FA;
+    --panel-dim:#EEF1F4;
+    --ink:#1B2130;
+    --ink-soft:#5B6472;
+    --ink-faint:#8891A0;
+    --rule:#D2D7DD;
+    --rule-strong:#AFB7C0;
+    --sunday:#C8102E;
+    --saturday:#1C4F9C;
+    --seal:#C8102E;
+    --radius-outer:2px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Pretendard','Malgun Gothic',-apple-system,BlinkMacSystemFont,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding:28px 16px 60px;
+  }
+  .sheet{
+    max-width:1180px;
+    margin:0 auto;
+  }
+
+  /* ---------- Masthead ---------- */
+  .masthead{
+    text-align:center;
+    padding:6px 0 18px;
+    border-bottom:1px solid var(--rule-strong);
+    margin-bottom:20px;
+  }
+  .masthead .eraline{
+    font-size:13px;
+    color:var(--ink-soft);
+    letter-spacing:.02em;
+    margin:0 0 2px;
+  }
+  .masthead h1{
+    font-family:'Song Myung',serif;
+    font-size:clamp(30px,5vw,46px);
+    font-weight:400;
+    margin:0;
+    letter-spacing:.01em;
+    line-height:1.15;
+  }
+  .masthead .sub{
+    font-size:13px;
+    color:var(--ink-faint);
+    margin:6px 0 0;
+  }
+
+  /* ---------- Controls ---------- */
+  .controls{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px 22px;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 4px 20px;
+    border-bottom:1px solid var(--rule);
+    margin-bottom:22px;
+  }
+  .nav-group, .view-group, .jump-group{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  button{
+    font-family:inherit;
+    cursor:pointer;
+  }
+  .nav-group button{
+    background:none;
+    border:1px solid var(--rule-strong);
+    color:var(--ink);
+    width:34px;height:34px;
+    border-radius:50%;
+    font-size:14px;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .15s, color .15s, border-color .15s;
+  }
+  .nav-group button:hover{ background:var(--ink); color:var(--panel); border-color:var(--ink); }
+  .nav-group #todayBtn{
+    width:auto; border-radius:16px; padding:0 16px; font-size:13.5px; font-weight:600;
+  }
+
+  .view-group{
+    border:1px solid var(--rule-strong);
+    border-radius:16px;
+    padding:3px;
+    background:var(--panel);
+  }
+  .view-group button{
+    background:none;
+    border:none;
+    color:var(--ink-soft);
+    font-size:13px;
+    padding:6px 13px;
+    border-radius:13px;
+    font-weight:500;
+    transition:background .15s, color .15s;
+  }
+  .view-group button.active{
+    background:var(--ink);
+    color:var(--panel);
+    font-weight:600;
+  }
+  .view-group button:not(.active):hover{ color:var(--ink); }
+
+  .jump-group{
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+  .jump-group label{ display:flex; align-items:center; gap:5px; }
+  .jump-group input, .jump-group select{
+    font-family:inherit;
+    font-size:13.5px;
+    border:1px solid var(--rule-strong);
+    border-radius:6px;
+    padding:5px 7px;
+    background:var(--panel);
+    color:var(--ink);
+    width:70px;
+  }
+  .jump-group select{ width:62px; }
+  .jump-group button{
+    background:var(--ink);
+    color:var(--panel);
+    border:none;
+    border-radius:6px;
+    padding:6px 14px;
+    font-size:13.5px;
+    font-weight:600;
+  }
+  .jump-group button:hover{ background:var(--ink-soft); }
+
+  /* ---------- Grid of month tiles ---------- */
+  .grid{
+    display:grid;
+    gap:28px 22px;
+  }
+  .grid-1{ grid-template-columns:1fr; max-width:620px; margin:0 auto; }
+  .grid-multi{ grid-template-columns:repeat(3,1fr); }
+  @media (max-width:900px){ .grid-multi{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:560px){ .grid-multi{ grid-template-columns:1fr; } }
+
+  .tile{
+    background:var(--panel);
+    border:1px solid var(--rule);
+  }
+  .grid-1 .tile{ padding:4px 6px 14px; }
+  .grid-multi .tile{ padding:2px 2px 10px; }
+
+  .tile-head{
+    text-align:center;
+    padding:12px 0 10px;
+    border-bottom:1px solid var(--rule);
+    font-weight:600;
+  }
+  .grid-1 .tile-head{ font-size:20px; }
+  .grid-multi .tile-head{ font-size:14.5px; }
+  .tile-head .ym-main{ color:var(--ink); }
+  .tile-head .ym-sub{ color:var(--ink-faint); font-weight:400; font-size:.78em; margin-left:4px; }
+
+  table.cal{
+    width:100%;
+    border-collapse:collapse;
+    table-layout:fixed;
+  }
+  table.cal th{
+    font-weight:500;
+    color:var(--ink-faint);
+    font-size:11.5px;
+    padding:9px 0 7px;
+    border-bottom:1px solid var(--rule);
+  }
+  .grid-1 table.cal th{ font-size:12.5px; }
+  table.cal th.sun{ color:var(--sunday); }
+  table.cal th.sat{ color:var(--saturday); }
+
+  table.cal td{
+    vertical-align:top;
+    border-bottom:1px solid var(--panel-dim);
+    position:relative;
+  }
+  .grid-1 table.cal td{ height:66px; padding:5px 6px 2px; }
+  .grid-multi table.cal td{ height:40px; padding:3px 3px 2px; }
+
+  .daynum{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-size:13.5px;
+    font-weight:500;
+    width:22px;height:22px;
+  }
+  .grid-multi .daynum{ font-size:11.5px; width:18px;height:18px; }
+
+  td.sun .daynum{ color:var(--sunday); }
+  td.sat .daynum{ color:var(--saturday); }
+  td.off .daynum{ color:var(--sunday); font-weight:700; }
+  td.other-month .daynum{ color:#C7CCD3; }
+  td.other-month .holiday-tag, td.other-month .obs-tag{ visibility:hidden; }
+
+  td.today .daynum{
+    position:relative;
+  }
+  td.today .daynum::after{
+    content:"";
+    position:absolute;
+    inset:-3px;
+    border:1.4px solid var(--seal);
+    border-radius:50%;
+  }
+
+  .holiday-tag{
+    display:block;
+    font-size:10.5px;
+    line-height:1.25;
+    color:var(--sunday);
+    margin-top:2px;
+    font-weight:500;
+  }
+  .grid-multi .holiday-tag{
+    font-size:0;
+    height:5px;width:5px;
+    border-radius:50%;
+    background:var(--sunday);
+    margin:3px auto 0;
+  }
+  .obs-tag{
+    display:block;
+    font-size:10.5px;
+    line-height:1.25;
+    color:var(--ink-faint);
+    margin-top:2px;
+  }
+  .grid-multi .obs-tag{ display:none; }
+
+  /* ---------- Holiday list ---------- */
+  .holiday-list{
+    margin-top:30px;
+    padding-top:20px;
+    border-top:1px solid var(--rule);
+  }
+  .holiday-list h2{
+    font-size:14.5px;
+    font-weight:600;
+    margin:0 0 12px;
+    color:var(--ink);
+  }
+  .holiday-list ul{
+    list-style:none;
+    margin:0;padding:0;
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:7px 18px;
+  }
+  .holiday-list li{
+    font-size:13px;
+    color:var(--ink-soft);
+    display:flex;
+    gap:9px;
+    padding:3px 0;
+  }
+  .holiday-list li .d{
+    color:var(--sunday);
+    font-weight:600;
+    min-width:88px;
+    flex-shrink:0;
+  }
+  .holiday-list li.observance .d{ color:var(--ink-faint); }
+  .holiday-list .empty{ color:var(--ink-faint); font-size:13px; }
+
+  /* ---------- Legend / footer ---------- */
+  .legend{
+    display:flex;
+    gap:22px;
+    justify-content:center;
+    margin-top:26px;
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+  .legend span.dot{
+    display:inline-block;
+    width:9px;height:9px;
+    border-radius:50%;
+    margin-right:6px;
+    vertical-align:middle;
+  }
+  .legend .sun{ background:var(--sunday); }
+  .legend .sat{ background:var(--saturday); }
+  .legend .obs{ background:var(--ink-faint); }
+  .range-note{
+    text-align:center;
+    font-size:11.5px;
+    color:var(--ink-faint);
+    margin-top:8px;
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <header class="masthead">
+    <p class="eraline" id="eraline">책력 · 한국 공휴일</p>
+    <h1 id="title">2026년 10월</h1>
+    <p class="sub">일요일과 공휴일은 적색, 토요일은 청색으로 표시합니다</p>
+  </header>
+
+  <nav class="controls">
+    <div class="nav-group">
+      <button id="prevBtn" aria-label="이전 기간" title="이전">◀</button>
+      <button id="todayBtn">오늘</button>
+      <button id="nextBtn" aria-label="다음 기간" title="다음">▶</button>
+    </div>
+
+    <div class="view-group" role="group" aria-label="보기 범위 선택">
+      <button data-span="1" class="active">1개월</button>
+      <button data-span="3">3개월</button>
+      <button data-span="6">6개월</button>
+      <button data-span="9">9개월</button>
+      <button data-span="12">12개월</button>
+    </div>
+
+    <form class="jump-group" id="jumpForm">
+      <label>연<input type="number" id="jumpYear" step="1" placeholder="2026"></label>
+      <label>월
+        <select id="jumpMonth"></select>
+      </label>
+      <button type="submit">이동</button>
+    </form>
+  </nav>
+
+  <main id="grid" class="grid grid-1"></main>
+
+  <section class="holiday-list">
+    <h2 id="holidayListTitle">이번 기간의 공휴일</h2>
+    <ul id="holidayListItems"></ul>
+  </section>
+
+  <footer>
+    <div class="legend">
+      <span><span class="dot sun"></span>일요일 · 공휴일</span>
+      <span><span class="dot sat"></span>토요일</span>
+      <span><span class="dot obs"></span>기념일(비공휴일)</span>
+    </div>
+    <p class="range-note">공휴일 데이터 수록 범위: 2015년 ~ 2036년 (대체공휴일 포함)</p>
+  </footer>
+</div>
+
+<script>
+/* ---------------- Holiday data (2015–2036, KST, includes substitute holidays) ---------------- */
+const HOLIDAYS_RAW = {"2015":[{"date":"2015-01-01","name":"새해","type":"Public"},{"date":"2015-02-18","name":"설날","type":"Public"},{"date":"2015-02-19","name":"설날","type":"Public"},{"date":"2015-02-20","name":"설날","type":"Public"},{"date":"2015-03-01","name":"3·1절","type":"Public"},{"date":"2015-05-05","name":"어린이날","type":"Public"},{"date":"2015-05-25","name":"부처님 오신 날","type":"Public"},{"date":"2015-06-06","name":"현충일","type":"Public"},{"date":"2015-07-17","name":"제헌절","type":"Observance"},{"date":"2015-08-15","name":"광복절","type":"Public"},{"date":"2015-09-26","name":"추석","type":"Public"},{"date":"2015-09-28","name":"추석","type":"Public"},{"date":"2015-09-29","name":"추석","type":"Public"},{"date":"2015-10-03","name":"개천절","type":"Public"},{"date":"2015-10-09","name":"한글날","type":"Public"},{"date":"2015-12-25","name":"크리스마스","type":"Public"}],"2016":[{"date":"2016-01-01","name":"새해","type":"Public"},{"date":"2016-02-06","name":"설날","type":"Public"},{"date":"2016-02-08","name":"설날","type":"Public"},{"date":"2016-02-09","name":"설날","type":"Public"},{"date":"2016-03-01","name":"3·1절","type":"Public"},{"date":"2016-05-05","name":"어린이날","type":"Public"},{"date":"2016-05-14","name":"부처님 오신 날","type":"Public"},{"date":"2016-06-06","name":"현충일","type":"Public"},{"date":"2016-07-18","name":"제헌절","type":"Observance"},{"date":"2016-08-15","name":"광복절","type":"Public"},{"date":"2016-09-14","name":"추석","type":"Public"},{"date":"2016-09-15","name":"추석","type":"Public"},{"date":"2016-09-16","name":"추석","type":"Public"},{"date":"2016-10-03","name":"개천절","type":"Public"},{"date":"2016-10-09","name":"한글날","type":"Public"},{"date":"2016-12-25","name":"크리스마스","type":"Public"}],"2017":[{"date":"2017-01-01","name":"새해","type":"Public"},{"date":"2017-01-27","name":"설날","type":"Public"},{"date":"2017-01-28","name":"설날","type":"Public"},{"date":"2017-01-30","name":"설날","type":"Public"},{"date":"2017-03-01","name":"3·1절","type":"Public"},{"date":"2017-05-03","name":"부처님 오신 날","type":"Public"},{"date":"2017-05-05","name":"어린이날","type":"Public"},{"date":"2017-06-06","name":"현충일","type":"Public"},{"date":"2017-07-17","name":"제헌절","type":"Observance"},{"date":"2017-08-15","name":"광복절","type":"Public"},{"date":"2017-10-03","name":"개천절","type":"Public"},{"date":"2017-10-03","name":"추석","type":"Public"},{"date":"2017-10-04","name":"추석","type":"Public"},{"date":"2017-10-05","name":"추석","type":"Public"},{"date":"2017-10-09","name":"한글날","type":"Public"},{"date":"2017-12-25","name":"크리스마스","type":"Public"}],"2018":[{"date":"2018-01-01","name":"새해","type":"Public"},{"date":"2018-02-15","name":"설날","type":"Public"},{"date":"2018-02-16","name":"설날","type":"Public"},{"date":"2018-02-17","name":"설날","type":"Public"},{"date":"2018-03-01","name":"3·1절","type":"Public"},{"date":"2018-05-07","name":"어린이날","type":"Public"},{"date":"2018-05-22","name":"부처님 오신 날","type":"Public"},{"date":"2018-06-06","name":"현충일","type":"Public"},{"date":"2018-07-17","name":"제헌절","type":"Observance"},{"date":"2018-08-15","name":"광복절","type":"Public"},{"date":"2018-09-24","name":"추석","type":"Public"},{"date":"2018-09-25","name":"추석","type":"Public"},{"date":"2018-09-26","name":"추석","type":"Public"},{"date":"2018-10-03","name":"개천절","type":"Public"},{"date":"2018-10-09","name":"한글날","type":"Public"},{"date":"2018-12-25","name":"크리스마스","type":"Public"}],"2019":[{"date":"2019-01-01","name":"새해","type":"Public"},{"date":"2019-02-04","name":"설날","type":"Public"},{"date":"2019-02-05","name":"설날","type":"Public"},{"date":"2019-02-06","name":"설날","type":"Public"},{"date":"2019-03-01","name":"3·1절","type":"Public"},{"date":"2019-05-06","name":"어린이날","type":"Public"},{"date":"2019-05-12","name":"부처님 오신 날","type":"Public"},{"date":"2019-06-06","name":"현충일","type":"Public"},{"date":"2019-07-17","name":"제헌절","type":"Observance"},{"date":"2019-08-15","name":"광복절","type":"Public"},{"date":"2019-09-12","name":"추석","type":"Public"},{"date":"2019-09-13","name":"추석","type":"Public"},{"date":"2019-09-14","name":"추석","type":"Public"},{"date":"2019-10-03","name":"개천절","type":"Public"},{"date":"2019-10-09","name":"한글날","type":"Public"},{"date":"2019-12-25","name":"크리스마스","type":"Public"}],"2020":[{"date":"2020-01-01","name":"새해","type":"Public"},{"date":"2020-01-24","name":"설날","type":"Public"},{"date":"2020-01-25","name":"설날","type":"Public"},{"date":"2020-01-27","name":"설날","type":"Public"},{"date":"2020-03-01","name":"3·1절","type":"Public"},{"date":"2020-04-30","name":"부처님 오신 날","type":"Public"},{"date":"2020-05-05","name":"어린이날","type":"Public"},{"date":"2020-06-06","name":"현충일","type":"Public"},{"date":"2020-07-17","name":"제헌절","type":"Observance"},{"date":"2020-08-15","name":"광복절","type":"Public"},{"date":"2020-09-30","name":"추석","type":"Public"},{"date":"2020-10-01","name":"추석","type":"Public"},{"date":"2020-10-02","name":"추석","type":"Public"},{"date":"2020-10-03","name":"개천절","type":"Public"},{"date":"2020-10-09","name":"한글날","type":"Public"},{"date":"2020-12-25","name":"크리스마스","type":"Public"}],"2021":[{"date":"2021-01-01","name":"새해","type":"Public"},{"date":"2021-02-11","name":"설날","type":"Public"},{"date":"2021-02-12","name":"설날","type":"Public"},{"date":"2021-02-13","name":"설날","type":"Public"},{"date":"2021-03-01","name":"3·1절","type":"Public"},{"date":"2021-05-05","name":"어린이날","type":"Public"},{"date":"2021-05-19","name":"부처님 오신 날","type":"Public"},{"date":"2021-06-06","name":"현충일","type":"Public"},{"date":"2021-07-19","name":"제헌절","type":"Observance"},{"date":"2021-08-15","name":"광복절","type":"Public"},{"date":"2021-09-20","name":"추석","type":"Public"},{"date":"2021-09-21","name":"추석","type":"Public"},{"date":"2021-09-22","name":"추석","type":"Public"},{"date":"2021-10-03","name":"개천절","type":"Public"},{"date":"2021-10-09","name":"한글날","type":"Public"},{"date":"2021-12-25","name":"크리스마스","type":"Public"}],"2022":[{"date":"2022-01-01","name":"새해","type":"Public"},{"date":"2022-01-31","name":"설날","type":"Public"},{"date":"2022-02-01","name":"설날","type":"Public"},{"date":"2022-02-02","name":"설날","type":"Public"},{"date":"2022-03-01","name":"3·1절","type":"Public"},{"date":"2022-05-05","name":"어린이날","type":"Public"},{"date":"2022-05-08","name":"부처님 오신 날","type":"Public"},{"date":"2022-06-06","name":"현충일","type":"Public"},{"date":"2022-07-18","name":"제헌절","type":"Observance"},{"date":"2022-08-15","name":"광복절","type":"Public"},{"date":"2022-09-09","name":"추석","type":"Public"},{"date":"2022-09-10","name":"추석","type":"Public"},{"date":"2022-09-12","name":"추석","type":"Public"},{"date":"2022-10-03","name":"개천절","type":"Public"},{"date":"2022-10-10","name":"한글날","type":"Public"},{"date":"2022-12-25","name":"크리스마스","type":"Public"}],"2023":[{"date":"2023-01-01","name":"새해","type":"Public"},{"date":"2023-01-21","name":"설날","type":"Public"},{"date":"2023-01-23","name":"설날","type":"Public"},{"date":"2023-01-24","name":"설날","type":"Public"},{"date":"2023-03-01","name":"3·1절","type":"Public"},{"date":"2023-05-05","name":"어린이날","type":"Public"},{"date":"2023-05-29","name":"부처님 오신 날","type":"Public"},{"date":"2023-06-06","name":"현충일","type":"Public"},{"date":"2023-07-17","name":"제헌절","type":"Observance"},{"date":"2023-08-15","name":"광복절","type":"Public"},{"date":"2023-09-28","name":"추석","type":"Public"},{"date":"2023-09-29","name":"추석","type":"Public"},{"date":"2023-09-30","name":"추석","type":"Public"},{"date":"2023-10-03","name":"개천절","type":"Public"},{"date":"2023-10-09","name":"한글날","type":"Public"},{"date":"2023-12-25","name":"크리스마스","type":"Public"}],"2024":[{"date":"2024-01-01","name":"새해","type":"Public"},{"date":"2024-02-09","name":"설날","type":"Public"},{"date":"2024-02-10","name":"설날","type":"Public"},{"date":"2024-02-12","name":"설날","type":"Public"},{"date":"2024-03-01","name":"3·1절","type":"Public"},{"date":"2024-05-06","name":"어린이날","type":"Public"},{"date":"2024-05-15","name":"부처님 오신 날","type":"Public"},{"date":"2024-06-06","name":"현충일","type":"Public"},{"date":"2024-07-17","name":"제헌절","type":"Observance"},{"date":"2024-08-15","name":"광복절","type":"Public"},{"date":"2024-09-16","name":"추석","type":"Public"},{"date":"2024-09-17","name":"추석","type":"Public"},{"date":"2024-09-18","name":"추석","type":"Public"},{"date":"2024-10-03","name":"개천절","type":"Public"},{"date":"2024-10-09","name":"한글날","type":"Public"},{"date":"2024-12-25","name":"크리스마스","type":"Public"}],"2025":[{"date":"2025-01-01","name":"새해","type":"Public"},{"date":"2025-01-28","name":"설날","type":"Public"},{"date":"2025-01-29","name":"설날","type":"Public"},{"date":"2025-01-30","name":"설날","type":"Public"},{"date":"2025-03-03","name":"3·1절","type":"Public"},{"date":"2025-05-05","name":"어린이날","type":"Public"},{"date":"2025-05-05","name":"부처님 오신 날","type":"Public"},{"date":"2025-06-06","name":"현충일","type":"Public"},{"date":"2025-07-17","name":"제헌절","type":"Observance"},{"date":"2025-08-15","name":"광복절","type":"Public"},{"date":"2025-10-03","name":"개천절","type":"Public"},{"date":"2025-10-06","name":"추석","type":"Public"},{"date":"2025-10-07","name":"추석","type":"Public"},{"date":"2025-10-08","name":"추석","type":"Public"},{"date":"2025-10-09","name":"한글날","type":"Public"},{"date":"2025-12-25","name":"크리스마스","type":"Public"}],"2026":[{"date":"2026-01-01","name":"새해","type":"Public"},{"date":"2026-02-16","name":"설날","type":"Public"},{"date":"2026-02-17","name":"설날","type":"Public"},{"date":"2026-02-18","name":"설날","type":"Public"},{"date":"2026-03-02","name":"3·1절","type":"Public"},{"date":"2026-05-01","name":"노동절","type":"Public"},{"date":"2026-05-05","name":"어린이날","type":"Public"},{"date":"2026-05-25","name":"부처님 오신 날","type":"Public"},{"date":"2026-06-03","name":"지방 선거일","type":"Public"},{"date":"2026-06-06","name":"현충일","type":"Public"},{"date":"2026-07-17","name":"제헌절","type":"Public"},{"date":"2026-08-17","name":"광복절","type":"Public"},{"date":"2026-09-24","name":"추석","type":"Public"},{"date":"2026-09-25","name":"추석","type":"Public"},{"date":"2026-09-26","name":"추석","type":"Public"},{"date":"2026-10-05","name":"개천절","type":"Public"},{"date":"2026-10-09","name":"한글날","type":"Public"},{"date":"2026-12-25","name":"크리스마스","type":"Public"}],"2027":[{"date":"2027-01-01","name":"새해","type":"Public"},{"date":"2027-02-06","name":"설날","type":"Public"},{"date":"2027-02-08","name":"설날","type":"Public"},{"date":"2027-02-09","name":"설날","type":"Public"},{"date":"2027-03-01","name":"3·1절","type":"Public"},{"date":"2027-05-03","name":"노동절","type":"Public"},{"date":"2027-05-05","name":"어린이날","type":"Public"},{"date":"2027-05-13","name":"부처님 오신 날","type":"Public"},{"date":"2027-06-06","name":"현충일","type":"Public"},{"date":"2027-07-19","name":"제헌절","type":"Public"},{"date":"2027-08-16","name":"광복절","type":"Public"},{"date":"2027-09-14","name":"추석","type":"Public"},{"date":"2027-09-15","name":"추석","type":"Public"},{"date":"2027-09-16","name":"추석","type":"Public"},{"date":"2027-10-04","name":"개천절","type":"Public"},{"date":"2027-10-11","name":"한글날","type":"Public"},{"date":"2027-12-25","name":"크리스마스","type":"Public"}],"2028":[{"date":"2028-01-01","name":"새해","type":"Public"},{"date":"2028-01-26","name":"설날","type":"Public"},{"date":"2028-01-27","name":"설날","type":"Public"},{"date":"2028-01-28","name":"설날","type":"Public"},{"date":"2028-03-01","name":"3·1절","type":"Public"},{"date":"2028-05-01","name":"노동절","type":"Public"},{"date":"2028-05-02","name":"부처님 오신 날","type":"Public"},{"date":"2028-05-05","name":"어린이날","type":"Public"},{"date":"2028-06-06","name":"현충일","type":"Public"},{"date":"2028-07-17","name":"제헌절","type":"Public"},{"date":"2028-08-15","name":"광복절","type":"Public"},{"date":"2028-10-02","name":"추석","type":"Public"},{"date":"2028-10-03","name":"개천절","type":"Public"},{"date":"2028-10-03","name":"추석","type":"Public"},{"date":"2028-10-04","name":"추석","type":"Public"},{"date":"2028-10-09","name":"한글날","type":"Public"},{"date":"2028-12-25","name":"크리스마스","type":"Public"}],"2029":[{"date":"2029-01-01","name":"새해","type":"Public"},{"date":"2029-02-12","name":"설날","type":"Public"},{"date":"2029-02-13","name":"설날","type":"Public"},{"date":"2029-02-14","name":"설날","type":"Public"},{"date":"2029-03-01","name":"3·1절","type":"Public"},{"date":"2029-05-01","name":"노동절","type":"Public"},{"date":"2029-05-07","name":"어린이날","type":"Public"},{"date":"2029-05-21","name":"부처님 오신 날","type":"Public"},{"date":"2029-06-06","name":"현충일","type":"Public"},{"date":"2029-07-17","name":"제헌절","type":"Public"},{"date":"2029-08-15","name":"광복절","type":"Public"},{"date":"2029-09-21","name":"추석","type":"Public"},{"date":"2029-09-22","name":"추석","type":"Public"},{"date":"2029-09-24","name":"추석","type":"Public"},{"date":"2029-10-03","name":"개천절","type":"Public"},{"date":"2029-10-09","name":"한글날","type":"Public"},{"date":"2029-12-25","name":"크리스마스","type":"Public"}],"2030":[{"date":"2030-01-01","name":"새해","type":"Public"},{"date":"2030-02-02","name":"설날","type":"Public"},{"date":"2030-02-04","name":"설날","type":"Public"},{"date":"2030-02-05","name":"설날","type":"Public"},{"date":"2030-03-01","name":"3·1절","type":"Public"},{"date":"2030-05-01","name":"노동절","type":"Public"},{"date":"2030-05-06","name":"어린이날","type":"Public"},{"date":"2030-05-09","name":"부처님 오신 날","type":"Public"},{"date":"2030-06-06","name":"현충일","type":"Public"},{"date":"2030-07-17","name":"제헌절","type":"Public"},{"date":"2030-08-15","name":"광복절","type":"Public"},{"date":"2030-09-11","name":"추석","type":"Public"},{"date":"2030-09-12","name":"추석","type":"Public"},{"date":"2030-09-13","name":"추석","type":"Public"},{"date":"2030-10-03","name":"개천절","type":"Public"},{"date":"2030-10-09","name":"한글날","type":"Public"},{"date":"2030-12-25","name":"크리스마스","type":"Public"}],"2031":[{"date":"2031-01-01","name":"새해","type":"Public"},{"date":"2031-01-22","name":"설날","type":"Public"},{"date":"2031-01-23","name":"설날","type":"Public"},{"date":"2031-01-24","name":"설날","type":"Public"},{"date":"2031-03-03","name":"3·1절","type":"Public"},{"date":"2031-04-29","name":"부처님 오신 날","type":"Public"},{"date":"2031-05-01","name":"노동절","type":"Public"},{"date":"2031-05-05","name":"어린이날","type":"Public"},{"date":"2031-06-06","name":"현충일","type":"Public"},{"date":"2031-07-17","name":"제헌절","type":"Public"},{"date":"2031-08-15","name":"광복절","type":"Public"},{"date":"2031-09-30","name":"추석","type":"Public"},{"date":"2031-10-01","name":"추석","type":"Public"},{"date":"2031-10-02","name":"추석","type":"Public"},{"date":"2031-10-03","name":"개천절","type":"Public"},{"date":"2031-10-09","name":"한글날","type":"Public"},{"date":"2031-12-25","name":"크리스마스","type":"Public"}],"2032":[{"date":"2032-01-01","name":"새해","type":"Public"},{"date":"2032-02-10","name":"설날","type":"Public"},{"date":"2032-02-11","name":"설날","type":"Public"},{"date":"2032-02-12","name":"설날","type":"Public"},{"date":"2032-03-01","name":"3·1절","type":"Public"},{"date":"2032-05-03","name":"노동절","type":"Public"},{"date":"2032-05-05","name":"어린이날","type":"Public"},{"date":"2032-05-17","name":"부처님 오신 날","type":"Public"},{"date":"2032-06-06","name":"현충일","type":"Public"},{"date":"2032-07-19","name":"제헌절","type":"Public"},{"date":"2032-08-16","name":"광복절","type":"Public"},{"date":"2032-09-18","name":"추석","type":"Public"},{"date":"2032-09-20","name":"추석","type":"Public"},{"date":"2032-09-21","name":"추석","type":"Public"},{"date":"2032-10-04","name":"개천절","type":"Public"},{"date":"2032-10-11","name":"한글날","type":"Public"},{"date":"2032-12-25","name":"크리스마스","type":"Public"}],"2033":[{"date":"2033-01-01","name":"새해","type":"Public"},{"date":"2033-01-29","name":"설날","type":"Public"},{"date":"2033-01-31","name":"설날","type":"Public"},{"date":"2033-02-01","name":"설날","type":"Public"},{"date":"2033-03-01","name":"3·1절","type":"Public"},{"date":"2033-05-02","name":"노동절","type":"Public"},{"date":"2033-05-05","name":"어린이날","type":"Public"},{"date":"2033-05-06","name":"부처님 오신 날","type":"Public"},{"date":"2033-06-06","name":"현충일","type":"Public"},{"date":"2033-07-18","name":"제헌절","type":"Public"},{"date":"2033-08-15","name":"광복절","type":"Public"},{"date":"2033-09-07","name":"추석","type":"Public"},{"date":"2033-09-08","name":"추석","type":"Public"},{"date":"2033-09-09","name":"추석","type":"Public"},{"date":"2033-10-03","name":"개천절","type":"Public"},{"date":"2033-10-10","name":"한글날","type":"Public"},{"date":"2033-12-25","name":"크리스마스","type":"Public"}],"2034":[{"date":"2034-01-01","name":"새해","type":"Public"},{"date":"2034-02-18","name":"설날","type":"Public"},{"date":"2034-02-20","name":"설날","type":"Public"},{"date":"2034-02-21","name":"설날","type":"Public"},{"date":"2034-03-01","name":"3·1절","type":"Public"},{"date":"2034-05-01","name":"노동절","type":"Public"},{"date":"2034-05-05","name":"어린이날","type":"Public"},{"date":"2034-05-25","name":"부처님 오신 날","type":"Public"},{"date":"2034-06-06","name":"현충일","type":"Public"},{"date":"2034-07-17","name":"제헌절","type":"Public"},{"date":"2034-08-15","name":"광복절","type":"Public"},{"date":"2034-09-26","name":"추석","type":"Public"},{"date":"2034-09-27","name":"추석","type":"Public"},{"date":"2034-09-28","name":"추석","type":"Public"},{"date":"2034-10-03","name":"개천절","type":"Public"},{"date":"2034-10-09","name":"한글날","type":"Public"},{"date":"2034-12-25","name":"크리스마스","type":"Public"}],"2035":[{"date":"2035-01-01","name":"새해","type":"Public"},{"date":"2035-02-07","name":"설날","type":"Public"},{"date":"2035-02-08","name":"설날","type":"Public"},{"date":"2035-02-09","name":"설날","type":"Public"},{"date":"2035-03-01","name":"3·1절","type":"Public"},{"date":"2035-05-01","name":"노동절","type":"Public"},{"date":"2035-05-07","name":"어린이날","type":"Public"},{"date":"2035-05-15","name":"부처님 오신 날","type":"Public"},{"date":"2035-06-06","name":"현충일","type":"Public"},{"date":"2035-07-17","name":"제헌절","type":"Public"},{"date":"2035-08-15","name":"광복절","type":"Public"},{"date":"2035-09-15","name":"추석","type":"Public"},{"date":"2035-09-17","name":"추석","type":"Public"},{"date":"2035-09-18","name":"추석","type":"Public"},{"date":"2035-10-03","name":"개천절","type":"Public"},{"date":"2035-10-09","name":"한글날","type":"Public"},{"date":"2035-12-25","name":"크리스마스","type":"Public"}],"2036":[{"date":"2036-01-01","name":"새해","type":"Public"},{"date":"2036-01-26","name":"설날","type":"Public"},{"date":"2036-01-28","name":"설날","type":"Public"},{"date":"2036-01-29","name":"설날","type":"Public"},{"date":"2036-03-03","name":"3·1절","type":"Public"},{"date":"2036-05-01","name":"노동절","type":"Public"},{"date":"2036-05-05","name":"부처님 오신 날","type":"Public"},{"date":"2036-05-05","name":"어린이날","type":"Public"},{"date":"2036-06-06","name":"현충일","type":"Public"},{"date":"2036-07-17","name":"제헌절","type":"Public"},{"date":"2036-08-15","name":"광복절","type":"Public"},{"date":"2036-10-03","name":"개천절","type":"Public"},{"date":"2036-10-03","name":"추석","type":"Public"},{"date":"2036-10-04","name":"추석","type":"Public"},{"date":"2036-10-06","name":"추석","type":"Public"},{"date":"2036-10-09","name":"한글날","type":"Public"},{"date":"2036-12-25","name":"크리스마스","type":"Public"}]};
+
+// Build a flat lookup: "YYYY-MM-DD" -> {name, isHoliday}
+const HOLIDAYS = {};
+Object.keys(HOLIDAYS_RAW).forEach(year=>{
+  HOLIDAYS_RAW[year].forEach(item=>{
+    // 제헌절(Constitution Day) is a commemorative day, not a day off, regardless of
+    // how the source dataset tags it for any given year — keep it consistent.
+    const isHoliday = item.name === '제헌절' ? false : (item.type === 'Public');
+    const key = item.date;
+    if(!HOLIDAYS[key]){
+      HOLIDAYS[key] = { names:[item.name], isHoliday };
+    } else {
+      HOLIDAYS[key].names.push(item.name);
+      HOLIDAYS[key].isHoliday = HOLIDAYS[key].isHoliday || isHoliday;
+    }
+  });
+});
+
+/* ---------------- State ---------------- */
+const today = new Date();
+let viewYear = today.getFullYear();
+let viewMonth = today.getMonth(); // 0-based, first month shown
+let span = 1;
+
+const WD = ['일','월','화','수','목','금','토'];
+const monthSelect = document.getElementById('jumpMonth');
+for(let m=1;m<=12;m++){
+  const opt = document.createElement('option');
+  opt.value = m; opt.textContent = m+'월';
+  monthSelect.appendChild(opt);
+}
+
+function pad(n){ return n<10 ? '0'+n : ''+n; }
+function dateKey(y,m,d){ return y+'-'+pad(m+1)+'-'+pad(d); }
+
+function buildMonthTile(y, m){
+  const tile = document.createElement('div');
+  tile.className = 'tile';
+
+  const head = document.createElement('div');
+  head.className = 'tile-head';
+  head.innerHTML = `<span class="ym-main">${y}년 ${m+1}월</span>`;
+  tile.appendChild(head);
+
+  const table = document.createElement('table');
+  table.className = 'cal';
+  const thead = document.createElement('thead');
+  const trh = document.createElement('tr');
+  WD.forEach((w,i)=>{
+    const th = document.createElement('th');
+    th.textContent = w;
+    if(i===0) th.className='sun';
+    if(i===6) th.className='sat';
+    trh.appendChild(th);
+  });
+  thead.appendChild(trh);
+  table.appendChild(thead);
+
+  const tbody = document.createElement('tbody');
+  const firstDow = new Date(y,m,1).getDay();
+  const daysInMonth = new Date(y,m+1,0).getDate();
+  const daysInPrevMonth = new Date(y,m,0).getDate();
+
+  let cells = [];
+  // leading days from previous month
+  for(let i=0;i<firstDow;i++){
+    cells.push({ y, m, d: daysInPrevMonth-firstDow+1+i, otherMonth:true, dow:i });
+  }
+  for(let d=1;d<=daysInMonth;d++){
+    cells.push({ y, m, d, otherMonth:false, dow:(firstDow+d-1)%7 });
+  }
+  while(cells.length % 7 !== 0){
+    const idx = cells.length - (firstDow+daysInMonth);
+    cells.push({ y, m, d: idx+1, otherMonth:true, dow: cells.length%7 });
+  }
+
+  for(let r=0; r<cells.length/7; r++){
+    const tr = document.createElement('tr');
+    for(let c=0;c<7;c++){
+      const cell = cells[r*7+c];
+      const td = document.createElement('td');
+      const classes = [];
+      if(cell.dow===0) classes.push('sun');
+      if(cell.dow===6) classes.push('sat');
+      if(cell.otherMonth) classes.push('other-month');
+
+      const key = dateKey(cell.y, cell.m, cell.d);
+      const hol = !cell.otherMonth ? HOLIDAYS[key] : null;
+      if(hol && hol.isHoliday) classes.push('off');
+
+      const isToday = !cell.otherMonth && cell.y===today.getFullYear() && cell.m===today.getMonth() && cell.d===today.getDate();
+      if(isToday) classes.push('today');
+
+      td.className = classes.join(' ');
+      td.innerHTML = `<span class="daynum">${cell.d}</span>`;
+      if(hol){
+        const label = hol.names.join(', ');
+        if(hol.isHoliday){
+          const tag = document.createElement('span');
+          tag.className = 'holiday-tag';
+          tag.textContent = label;
+          tag.title = label;
+          td.appendChild(tag);
+        } else {
+          const tag = document.createElement('span');
+          tag.className = 'obs-tag';
+          tag.textContent = label;
+          td.appendChild(tag);
+        }
+      }
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+  table.appendChild(tbody);
+  tile.appendChild(table);
+  return tile;
+}
+
+function monthsInView(){
+  const out = [];
+  for(let i=0;i<span;i++){
+    let m = viewMonth + i;
+    let y = viewYear + Math.floor(m/12);
+    m = ((m % 12) + 12) % 12;
+    out.push([y,m]);
+  }
+  return out;
+}
+
+function render(){
+  const grid = document.getElementById('grid');
+  grid.className = 'grid ' + (span===1 ? 'grid-1' : 'grid-multi');
+  grid.innerHTML = '';
+  const months = monthsInView();
+  months.forEach(([y,m])=> grid.appendChild(buildMonthTile(y,m)));
+
+  // Title
+  const title = document.getElementById('title');
+  const eraline = document.getElementById('eraline');
+  if(span===1){
+    title.textContent = `${months[0][0]}년 ${months[0][1]+1}월`;
+    eraline.textContent = '책력 · 한국 공휴일';
+  } else {
+    const [sy,sm] = months[0];
+    const [ey,em] = months[months.length-1];
+    title.textContent = sy===ey ? `${sy}년 ${sm+1}월 – ${em+1}월` : `${sy}년 ${sm+1}월 – ${ey}년 ${em+1}월`;
+    eraline.textContent = `책력 · 한국 공휴일 · ${span}개월 보기`;
+  }
+
+  // Holiday list for visible range
+  const listTitle = document.getElementById('holidayListTitle');
+  listTitle.textContent = span===1 ? '이번 달의 공휴일' : '이번 기간의 공휴일';
+  const items = [];
+  months.forEach(([y,m])=>{
+    const daysInMonth = new Date(y,m+1,0).getDate();
+    for(let d=1;d<=daysInMonth;d++){
+      const key = dateKey(y,m,d);
+      const hol = HOLIDAYS[key];
+      if(hol){
+        items.push({ y, m, d, names: hol.names, isHoliday: hol.isHoliday });
+      }
+    }
+  });
+  const listEl = document.getElementById('holidayListItems');
+  listEl.innerHTML = '';
+  if(items.length===0){
+    listEl.innerHTML = '<li class="empty">해당 기간에 등록된 공휴일이 없습니다.</li>';
+  } else {
+    items.forEach(it=>{
+      const li = document.createElement('li');
+      if(!it.isHoliday) li.className = 'observance';
+      const wd = WD[new Date(it.y,it.m,it.d).getDay()];
+      li.innerHTML = `<span class="d">${it.y}.${pad(it.m+1)}.${pad(it.d)} (${wd})</span><span class="n">${it.names.join(', ')}</span>`;
+      listEl.appendChild(li);
+    });
+  }
+
+  // keep jump inputs in sync with the first visible month
+  document.getElementById('jumpYear').value = months[0][0];
+  monthSelect.value = months[0][1]+1;
+}
+
+/* ---------------- Controls wiring ---------------- */
+document.querySelectorAll('.view-group button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.view-group button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    span = parseInt(btn.dataset.span,10);
+    render();
+  });
+});
+
+document.getElementById('prevBtn').addEventListener('click', ()=>{
+  viewMonth -= span;
+  viewYear += Math.floor(viewMonth/12);
+  viewMonth = ((viewMonth % 12)+12)%12;
+  render();
+});
+document.getElementById('nextBtn').addEventListener('click', ()=>{
+  viewMonth += span;
+  viewYear += Math.floor(viewMonth/12);
+  viewMonth = ((viewMonth % 12)+12)%12;
+  render();
+});
+document.getElementById('todayBtn').addEventListener('click', ()=>{
+  viewYear = today.getFullYear();
+  viewMonth = today.getMonth();
+  render();
+});
+document.getElementById('jumpForm').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const y = parseInt(document.getElementById('jumpYear').value,10);
+  const m = parseInt(monthSelect.value,10);
+  if(!y || !m) return;
+  viewYear = y;
+  viewMonth = m-1;
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
