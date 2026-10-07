@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Link Ver.13.00 :: 2026 Portal Hub</title>
+  <link rel="icon" href="owl.png">
+  <link rel="apple-touch-icon" href="owl.png">
+
+  <!-- 기존 프로젝트 폰트 및 Pretendard CDN 연동 -->
+  <link rel="stylesheet" type="text/css" href="css/pretendard.css">
+  <link rel="stylesheet" type="text/css" href="css/CeraRound.css">
+  <link rel="stylesheet" type="text/css" href="css/pyeongchangpeace.css">
+
+  <style>
+    :root {
+      --bg-primary: #0f1117;
+      --bg-secondary: #171923;
+      --bg-card: rgba(26, 32, 44, 0.78);
+      --bg-card-hover: rgba(35, 43, 59, 0.95);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-focus: #6366f1;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent: #6366f1;
+      --accent-rgb: 99, 102, 241;
+      --accent-hover: #4f46e5;
+      --accent-gold: #f59e0b;
+      --badge-bg: rgba(99, 102, 241, 0.15);
+      --badge-text: #818cf8;
+      --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.45);
+      --glass-blur: blur(12px);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --bg-card: rgba(255, 255, 255, 0.88);
+      --bg-card-hover: #ffffff;
+      --border-color: rgba(226, 232, 240, 0.9);
+      --border-focus: #4f46e5;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --accent: #4f46e5;
+      --accent-rgb: 79, 70, 229;
+      --accent-hover: #4338ca;
+      --accent-gold: #d97706;
+      --badge-bg: rgba(79, 70, 229, 0.1);
+      --badge-text: #4338ca;
+      --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.5;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* 상단 헤더 */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      background-color: rgba(15, 17, 23, 0.8);
+      border-bottom: 1px solid var(--border-color);
+      transition: background-color 0.3s ease;
+    }
+    [data-theme="light"] .header {
+      background-color: rgba(248, 250, 252, 0.85);
+    }
+
+    .header-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand-badge {
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      font-weight: 600;
+    }
+
+    /* 검색창 & 컨트롤 */
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      max-width: 540px;
+      justify-content: flex-end;
+    }
+
+    .search-box {
+      position: relative;
+      width: 100%;
+      max-width: 360px;
+    }
+    .search-input {
+      width: 100%;
+      padding: 10px 40px 10px 38px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 9999px;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      outline: none;
+      transition: var(--transition);
+    }
+    .search-input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.2);
+    }
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      pointer-events: none;
+    }
+    .search-shortcut {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .header-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+    .header-btn:hover {
+      color: var(--text-primary);
+      border-color: var(--text-muted);
+    }
+
+    .clock-display {
+      font-family: 'Cera Round Pro DEMO', monospace;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      padding: 6px 12px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+    }
+
+    /* 탭 내비게이션 */
+    .nav-tabs-wrapper {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav-tabs-wrapper::-webkit-scrollbar {
+      display: none;
+    }
+    .nav-tabs {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 8px 24px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .nav-tab {
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-tab:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    [data-theme="light"] .nav-tab:hover {
+      background: rgba(0, 0, 0, 0.04);
+    }
+    .nav-tab.active {
+      color: #ffffff;
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* 메인 컨테이너 */
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* 퀵 런치 바 */
+    .quick-launch {
+      margin-bottom: 28px;
+    }
+    .quick-launch-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .quick-launch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 12px;
+    }
+    .quick-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      backdrop-filter: var(--glass-blur);
+      text-align: center;
+      transition: var(--transition);
+      box-shadow: var(--card-shadow);
+    }
+    .quick-btn:hover {
+      transform: translateY(-3px);
+      background: var(--bg-card-hover);
+      border-color: var(--accent);
+    }
+    .quick-icon {
+      font-size: 1.4rem;
+      margin-bottom: 6px;
+    }
+    .quick-name {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* 카테고리 섹션 및 그리드 */
+    .section-block {
+      margin-bottom: 36px;
+      scroll-margin-top: 130px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .section-title {
+      font-size: 1.18rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title span.icon {
+      font-size: 1.25rem;
+    }
+    .section-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 18px;
+    }
+
+    /* 링크 카드 */
+    .link-card {
+      background: var(--bg-card);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .link-card:hover {
+      transform: translateY(-2px);
+      background: var(--bg-card-hover);
+      border-color: rgba(var(--accent-rgb), 0.35);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    }
+    [data-theme="light"] .link-card:hover {
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .card-category {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-badge {
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      font-weight: 600;
+    }
+
+    .link-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .link-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid transparent;
+      transition: var(--transition);
+    }
+    .link-item:hover {
+      color: var(--text-primary);
+      background: rgba(var(--accent-rgb), 0.08);
+      border-color: rgba(var(--accent-rgb), 0.2);
+      padding-left: 15px;
+    }
+    .link-item-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .link-item-title strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    .link-tag {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      border: 1px solid var(--border-color);
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+    .link-ext-icon {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      opacity: 0.5;
+      transition: var(--transition);
+    }
+    .link-item:hover .link-ext-icon {
+      opacity: 1;
+      transform: translateX(2px) translateY(-1px);
+      color: var(--accent);
+    }
+
+    /* PARA / 인용구 / 특수 박스 */
+    .quote-box {
+      background: rgba(99, 102, 241, 0.06);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 16px 20px;
+      margin: 12px 0 20px;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .quote-title {
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--accent-gold);
+    }
+
+    .emoticon-board {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      margin-top: 10px;
+    }
+    .emo-chip {
+      padding: 6px 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: var(--transition);
+      user-select: none;
+    }
+    .emo-chip:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    /* 플로팅 컨트롤 (Top 이동 등) */
+    .floating-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: var(--transition);
+      opacity: 0.85;
+      z-index: 90;
+    }
+    .floating-top:hover {
+      opacity: 1;
+      transform: translateY(-3px);
+    }
+
+    /* 토스트 알림 */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      padding: 10px 20px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1000;
+      pointer-events: none;
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* 검색 결과 없음 */
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--text-muted);
+      font-size: 1rem;
+      display: none;
+    }
+
+    /* 푸터 */
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 32px 24px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      background: var(--bg-secondary);
+      margin-top: 60px;
+    }
+
+    @media (max-width: 768px) {
+      .header-inner {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .header-controls {
+        max-width: 100%;
+        justify-content: space-between;
+      }
+      .search-box {
+        max-width: 100%;
+      }
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+      .quick-launch-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 헤더 -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+        <img src="owl.png" alt="Owl Logo" class="brand-logo">
+        <div class="brand-title CeraRound">
+          LINK HUB
+          <span class="brand-badge">2026.10.07</span>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" class="search-input" placeholder="링크 검색 (키워드/이름)..." autocomplete="off">
+          <span class="search-shortcut">/</span>
+        </div>
+        <div class="clock-display" id="clockDisplay">00:00:00</div>
+        <button type="button" class="header-btn" id="themeToggle" title="테마 전환 (다크/라이트)">🌙</button>
+      </div>
+    </div>
+
+    <!-- 카테고리 퀵 내비게이션 탭 -->
+    <div class="nav-tabs-wrapper">
+      <nav class="nav-tabs">
+        <button class="nav-tab active" data-filter="all">🌟 전체보기</button>
+        <button class="nav-tab" data-target="sec-ai">🤖 AI & 학습</button>
+        <button class="nav-tab" data-target="sec-portal">🌐 포털 & 커뮤니티</button>
+        <button class="nav-tab" data-target="sec-game">🎮 게임 & 샤드</button>
+        <button class="nav-tab" data-target="sec-finance">💳 금융 & 통신</button>
+        <button class="nav-tab" data-target="sec-shop">🛒 쇼핑몰</button>
+        <button class="nav-tab" data-target="sec-tools">🛠️ 도구 & 어학사전</button>
+        <button class="nav-tab" data-target="sec-nas">☁️ 개인 인프라 & NAS</button>
+        <button class="nav-tab" data-target="sec-dev">💻 개발 & 레퍼런스</button>
+        <button class="nav-tab" data-target="sec-para">📂 PARA 아카이브</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- 퀵 런치 바 (가장 자주 찾는 핵심 링크) -->
+    <section class="quick-launch">
+      <div class="quick-launch-title">⚡ 빠른 즐겨찾기 (Quick Launch)</div>
+      <div class="quick-launch-grid">
+        <a href="https://claude.ai/" target="_blank" class="quick-btn">
+          <span class="quick-icon">🧠</span>
+          <span class="quick-name">Claude</span>
+        </a>
+        <a href="https://chatgpt.com/" target="_blank" class="quick-btn">
+          <span class="quick-icon">🤖</span>
+          <span class="quick-name">ChatGPT</span>
+        </a>
+        <a href="https://clova-x.naver.com/" target="_blank" class="quick-btn">
+          <span class="quick-icon">🤩</span>
+          <span class="quick-name">CLOVA X</span>
+        </a>
+        <a href="https://www.naver.com" target="_blank" class="quick-btn">
+          <span class="quick-icon">🟢</span>
+          <span class="quick-name">Naver</span>
+        </a>
+        <a href="https://www.google.co.kr/" target="_blank" class="quick-btn">
+          <span class="quick-icon">🔍</span>
+          <span class="quick-name">Google</span>
+        </a>
+        <a href="http://www.coupang.com" target="_blank" class="quick-btn">
+          <span class="quick-icon">🚀</span>
+          <span class="quick-name">쿠팡</span>
+        </a>
+        <a href="https://opic.quickconnect.to/" target="_blank" class="quick-btn">
+          <span class="quick-icon">📁</span>
+          <span class="quick-name">OPIC NAS</span>
+        </a>
+        <a href="https://junestyle76.github.io/moai/" target="_blank" class="quick-btn">
+          <span class="quick-icon">🗿</span>
+          <span class="quick-name">CLAN MOAI</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 검색 결과 없음 안내 -->
+    <div id="noResults" class="no-results">
+      검색어와 일치하는 링크가 없습니다.
+    </div>
+
+    <!-- 1. AI & 학습 섹션 -->
+    <section class="section-block" id="sec-ai">
+      <div class="section-header">
+        <h2 class="section-title"><span class="icon">🤖</span> AI & 학습 리소스</h2>
+        <span class="section-desc">생성형 AI 모델 및 온라인 도서/학습 사이트</span>
+      </div>
+      <div class="cards-grid">
+        <!-- AI Chat -->
+        <div class="link-card" data-category="ai">
+          <div class="card-top">
+            <span class="card-category">■ AI Chat Service</span>
+            <span class="card-badge">대화형 AI</span>
+          </div>
+          <ul class="link-list">
+            <li>
+              <a href="https://clova-x.naver.com/" target="_blank" class="link-item">
+                <span class="link-item-title"><strong>CLOVA X</strong> 🤩</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://claude.ai/" target="_blank" class="link-item">
+                <span class="link-item-title"><strong>Claude</strong> Anthropic</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://chatgpt.com/" target="_blank" class="link-item">
+                <span class="link-item-title"><strong>ChatGPT</strong> OpenAI</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://gemini.google.com" target="_blank" class="link-item">
+                <span class="link-item-title"><strong>Gemini</strong> Google</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.perplexity.ai/" target="_blank" class="link-item">
+                <span class="link-item-title">Perplexity AI 검색</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://wrtn.ai/" target="_blank" class="link-item">
+                <span class="link-item-title">wrtn. (뤼튼)</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Book & Docs -->
+        <div class="link-card" data-category="ai">
+          <div class="card-top">
+            <span class="card-category">■ Book & Docs</span>
+            <span class="card-badge">도서/문서</span>
+          </div>
+          <ul class="link-list">
+            <li>
+              <a href="https://www.kyobobook.co.kr/" target="_blank" class="link-item">
+                <span class="link-item-title">📖 교보문고</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://wikidocs.net/" target="_blank" class="link-item">
+                <span class="link-item-title">📖 위키독스 (WikiDocs)</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 포털 & 웹 커뮤니티 -->
+    <section class="section-block" id="sec-portal">
+      <div class="section-header">
+        <h2 class="section-title"><span class="icon">🌐</span> 포털, 블로그 & 클랜</h2>
+        <span class="section-desc">주요 검색 포털, 테크 블로그 및 커뮤니티</span>
+      </div>
+      <div class="cards-grid">
+        <!-- Community & Mail -->
+        <div class="link-card" data-category="portal">
+          <div class="card-top">
+            <span class="card-category">■ 포털 & 검색엔진</span>
+            <span class="card-badge">Portal</span>
+          </div>
+          <ul class="link-list">
+            <li>
+              <a href="https://www.naver.com" target="_blank" class="link-item">
+                <span class="link-item-title"><strong>Naver</strong> 네이버 포털</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.daum.net/" target="_blank" class="link-item">
+                <span class="link-item-title"><strong>Daum</strong> 다음 포털</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.google.co.kr/" target="_blank" class="link-item">
+                <span class="link-item-title"><strong>Google</strong> 구글 검색</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Tech Blog -->
+        <div class="link-card" data-category="portal">
+          <div class="card-top">
+            <span class="card-category">■ 테크 블로그</span>
+            <span class="card-badge">Blog</span>
+          </div>
+          <ul class="link-list">
+            <li>
+              <a href="https://www.tistory.com/" target="_blank" class="link-item">
+                <span class="link-item-title">티스토리 (Tistory) 홈</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://bugnebula.tistory.com/" target="_blank" class="link-item">
+                <span class="link-item-title">● Nebula 블로그</span>
+                <span class="link-tag">개인</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://sloth-code.tistory.com/" target="_blank" class="link-item">
+                <span class="link-item-title">● sloth-code 블로그</span>
+                <span class="link-tag">개발</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Company & Clan -->
+        <div class="link-card" data-category="portal">
+          <div class="card-top">
+            <span class="card-category">■ Team & Clan</span>
+            <span class="card-badge">클랜</span>
+          </div>
+          <ul class="link-list">
+            <li>
+              <a href="https://junestyle76.github.io/moai/" target="_blank" class="link-item">
+                <span class="link-item-title"><strong>CLAN MOAI</strong></span>
+                <span class="link-tag">모아이</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <div class="link-item PyeongchangPeace" style="color: var(--text-muted); font-size: 0.85rem;">
+                얼렁뚱땅! 궁디팡팡 🗿
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 게임 & 샤드 -->
+    <section class="section-block" id="sec-game">
+      <div class="section-header">
+        <h2 class="section-title"><span class="icon">🎮</span> 게임 & 샤드 정보</h2>
+        <span class="section-desc">대항해시대, 울티마 온라인, 마비노기 등 게임 공략 및 공식 링크</span>
+      </div>
+      <div class="cards-grid">
+        <!-- DHO -->
+        <div class="link-card" data-category="game">
+          <div class="card-top">
+            <span class="card-category">■ 대항해시대 온라인 (DHO)</span>
+            <span class="card-badge">DHO</span>
+          </div>
+          <ul class="link-list">
+            <li>
+              <a href="https://www.ssjoy.org/dho/" target="_blank" class="link-item">
+                <span class="link-item-title"><strong>DHO JOY</strong> DB 가이드</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://dho.inven.co.kr/" target="_blank" class="link-item">
+                <span class="link-item-title">DHO 인벤 커뮤니티</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://dho.netmarble.net/" target="_blank" class="link-item">
+                <span class="link-item-title">넷마블 DHO 공식</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://dho.game.daum.net/" target="_blank" class="link-item">
+                <span class="link-item-title">다음 게임 DHO</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Ultima Online -->
+        <div class="link-card" data-category="game">
+          <div class="card-top">
+            <span class="card-category">■ Ultima Online (UO)</span>
+            <span class="card-badge">UO</span>
+          </div>
+          <ul class="link-list">
+            <li>
+              <a href="https://www.uomargo.net/" target="_blank" class="link-item">
+                <span class="link-item-title">MARGO 프리샤드 홈피</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://zerosquare.me/MARGO" target="_blank" class="link-item">
+                <span class="link-item-title">MARGO Database</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="../temp/9_secrets_of_malas/9_secrets_of_malas.html" target="_blank" class="link-item">
+                <span class="link-item-title">🗺️ 말리스 대륙 9가지 비밀</span>
+                <span class="link-tag">로컬가이드</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Other Games -->
+        <div class="link-card" data-category="game">
+          <div class="card-top">
+            <span class="card-category">■ 모바일 & 온라인 RPG</span>
+            <span class="card-badge">Game</span>
+          </div>
+          <ul class="link-list">
+            <li>
+              <a href="https://mabinogimobile.nexon.com/Main" target="_blank" class="link-item">
+                <span class="link-item-title">마비노기 모바일 공홈</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://d-knowledge.tistory.com/244" target="_blank" class="link-item">
+                <span class="link-item-title">마비노기 모바일 채집 팁</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://tos.nexon.com/brand/20151208/index.aspx" target="_blank" class="link-item">
+                <span class="link-item-title">Tree of Savior (TOS)</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://tos.inven.co.kr/" target="_blank" class="link-item">
+                <span class="link-item-title">TOS 인벤</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 금융 & 통신 -->
+    <section class="section-block" id="sec-finance">
+      <div class="section-header">
+        <h2 class="section-title"><span class="icon">💳</span> 금융, 증권 & 통신</h2>
+        <span class="section-desc">은행, 증권사, 신용카드 및 이동통신사 바로가기</span>
+      </div>
+      <div class="cards-grid">
+        <!-- Banking & Stock -->
+        <div class="link-card" data-category="finance">
+          <div class="card-top">
+            <span class="card-category">■ 은행 & 증권</span>
+            <span class="card-badge">금융</span>
+          </div>
+          <ul class="link-list">
+            <li>
+              <a href="https://www.wooribank.com/" target="_blank" class="link-item">
+                <span class="link-item-title">우리은행 인터넷뱅킹</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.ibk.co.kr/" target="_blank" class="link-item">
+                <span class="link-item-title">기업은행 (IBK)</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.shinhan.com/" target="_blank" class="link-item">
+                <span class="link-item-title">신한은행</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.kiwoom.com/" target="_blank" class="link-item">
+                <span class="link-item-title">키움증권</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://finance.naver.com/" target="_blank" class="link-item">
+                <span class="link-item-title"><strong>네이버 금융</strong></span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://finance.naver.com/mystock/itemList.nhn?groupId=5" target="_blank" class="link-item">
+                <span class="link-item-title">Naver My Stock 관심종목</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Telecom & Card -->
+        <div class="link-card" data-category="finance">
+          <div class="card-top">
+            <span class="card-category">■ 카드 & 통신사</span>
+            <span class="card-badge">통신/카드</span>
+          </div>
+          <ul class="link-list">
+            <li>
+              <a href="https://www.bccard.com/" target="_blank" class="link-item">
+                <span class="link-item-title">BC 카드</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.hanacard.co.kr/" target="_blank" class="link-item">
+                <span class="link-item-title">하나카드</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.kt.com/" target="_blank" class="link-item">
+                <span class="link-item-title">KT 올레</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://www.uplus.co.kr/" target="_blank" class="link-item">
+                <span class="link-item-title">LG U+</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. 쇼핑몰 -->
+    <section class="section-block" id="sec-shop">
+      <div class="section-header">
+        <h2 class="section-title"><span class="icon">🛒</span> 종합 쇼핑 & 이커머스</h2>
+        <span class="section-desc">오픈마켓, 소셜커머스 및 전문 쇼핑몰</span>
+      </div>
+      <div class="cards-grid">
+        <!-- E-Commerce Main -->
+        <div class="link-card" data-category="shop">
+          <div class="card-top">
+            <span class="card-category">■ 종합 쇼핑몰</span>
+            <span class="card-badge">오픈마켓</span>
+          </div>
+          <ul class="link-list">
+            <li>
+              <a href="http://www.coupang.com" target="_blank" class="link-item">
+                <span class="link-item-title"><strong>쿠팡 (Coupang)</strong> 🚀</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://www.ssg.com/" target="_blank" class="link-item">
+                <span class="link-item-title"><strong>SSG.COM</strong> 쓱닷컴</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.gmarket.co.kr/" target="_blank" class="link-item">
+                <span class="link-item-title">G마켓 (Gmarket)</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://www.auction.co.kr/" target="_blank" class="link-item">
+                <span class="link-item-title">옥션 (Auction)</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.11st.co.kr" target="_blank" class="link-item">
+                <span class="link-item-title">11번가</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://www.interpark.com" target="_blank" class="link-item">
+                <span class="link-item-title">인터파크</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://www.gsshop.com" target="_blank" class="link-item">
+                <span class="link-item-title">GS SHOP</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Specialty Shop -->
+        <div class="link-card" data-category="shop">
+          <div class="card-top">
+            <span class="card-category">■ 도서 & 전문 쇼핑</span>
+            <span class="card-badge">전문몰</span>
+          </div>
+          <ul class="link-list">
+            <li>
+              <a href="http://www.yes24.com" target="_blank" class="link-item">
+                <span class="link-item-title">YES24 도서/음반</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://www.livingpick.com/" target="_blank" class="link-item">
+                <span class="link-item-title">LivingPick 리빙픽</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://www.fruitsasak.com" target="_blank" class="link-item">
+                <span class="link-item-title">제주과일가게</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. 도구 & 사전 -->
+    <section class="section-block" id="sec-tools">
+      <div class="section-header">
+        <h2 class="section-title"><span class="icon">🛠️</span> 어학사전 & 온라인 유틸리티</h2>
+        <span class="section-desc">사전, 번역기, 변환 도구 및 특수문자 팔레트</span>
+      </div>
+      <div class="cards-grid">
+        <!-- Dictionary & Translation -->
+        <div class="link-card" data-category="tools">
+          <div class="card-top">
+            <span class="card-category">■ 어학사전 & 번역</span>
+            <span class="card-badge">사전</span>
+          </div>
+          <ul class="link-list">
+            <li>
+              <a href="https://translate.google.com/" target="_blank" class="link-item">
+                <span class="link-item-title"><strong>구글 번역</strong> Google Translate</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://dic.naver.com/" target="_blank" class="link-item">
+                <span class="link-item-title">네이버 어학사전 통합</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://endic.naver.com/" target="_blank" class="link-item">
+                <span class="link-item-title">네이버 영어사전</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://dic.daum.net/" target="_blank" class="link-item">
+                <span class="link-item-title">다음 어학사전</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://small.dic.daum.net/" target="_blank" class="link-item">
+                <span class="link-item-title">다음 작은 사전 (미니)</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://www.google.co.kr/dictionary" target="_blank" class="link-item">
+                <span class="link-item-title">Google Dictionary</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Utilities -->
+        <div class="link-card" data-category="tools">
+          <div class="card-top">
+            <span class="card-category">■ 온라인 도구 & 미디어</span>
+            <span class="card-badge">유틸리티</span>
+          </div>
+          <ul class="link-list">
+            <li>
+              <a href="http://www.zamzar.com/" target="_blank" class="link-item">
+                <span class="link-item-title">Zamzar 이미지/파일 온라인 변환</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://www.thingiverse.com/thing:479966/#files" target="_blank" class="link-item">
+                <span class="link-item-title">Thingiverse 3D 모델링</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://wepplication.github.io/tools/charMap/#emoji" target="_blank" class="link-item">
+                <span class="link-item-title">특수문자 & 이모지 맵</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://peekle.tv/" target="_blank" class="link-item">
+                <span class="link-item-title">PEEKLE 미디어</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="sendToEmail.htm" target="_blank" class="link-item">
+                <span class="link-item-title">✉️ 문의 메일 전송 폼 (GAS 연동)</span>
+                <span class="link-tag">로컬</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. 개인 인프라 & NAS -->
+    <section class="section-block" id="sec-nas">
+      <div class="section-header">
+        <h2 class="section-title"><span class="icon">☁️</span> 개인 인프라 & NAS 리소스</h2>
+        <span class="section-desc">Synology NAS, 개인 위키, 사진 보관함 및 네트워크 관리</span>
+      </div>
+      <div class="cards-grid">
+        <div class="link-card" data-category="nas">
+          <div class="card-top">
+            <span class="card-category">■ OPIC Synology NAS</span>
+            <span class="card-badge">개인 서버</span>
+          </div>
+          <ul class="link-list">
+            <li>
+              <a href="https://opic.quickconnect.to/" target="_blank" class="link-item">
+                <span class="link-item-title"><strong>OPIC Quick Control</strong></span>
+                <span class="link-tag">QuickConnect</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="QuickConnect.to/opic?launchApp=SYNO.SDS.Drive.Application" target="_blank" class="link-item">
+                <span class="link-item-title">OPIC Synology Drive 앱</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://darknebula.synology.me/photo/#!Albums" target="_blank" class="link-item">
+                <span class="link-item-title">External Photo Station Albums</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://darknebula.synology.me/photo/#fromDsm" target="_blank" class="link-item">
+                <span class="link-item-title">Photo Station 6</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://darknebula.synology.me/" target="_blank" class="link-item">
+                <span class="link-item-title">Mobile Web 포털</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="link-card" data-category="nas">
+          <div class="card-top">
+            <span class="card-category">■ 개인 위키 & 네트워크</span>
+            <span class="card-badge">네트워크</span>
+          </div>
+          <ul class="link-list">
+            <li>
+              <a href="http://darknebula.synology.me/dokuwiki/doku.php" target="_blank" class="link-item">
+                <span class="link-item-title"><strong>DokuWiki</strong> (Rosette nebula)</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://darknebula.synology.me:3000/" target="_blank" class="link-item">
+                <span class="link-item-title">그누보드 (Gnuboard :3000)</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://darknebula.synology.me:8080/start.asp" target="_blank" class="link-item">
+                <span class="link-item-title">공유기 관리 (MERCURY RUSH326N)</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. 개발 & 웹 테크놀로지 -->
+    <section class="section-block" id="sec-dev">
+      <div class="section-header">
+        <h2 class="section-title"><span class="icon">💻</span> 개발 & 웹 표준 레퍼런스</h2>
+        <span class="section-desc">C++, 웹 표준 스펙, IDE 설정 및 기술 문서</span>
+      </div>
+      <div class="cards-grid">
+        <div class="link-card" data-category="dev">
+          <div class="card-top">
+            <span class="card-category">■ 언어 & 웹 표준</span>
+            <span class="card-badge">Spec</span>
+          </div>
+          <ul class="link-list">
+            <li>
+              <a href="http://www.cplusplus.com/" target="_blank" class="link-item">
+                <span class="link-item-title"><strong>C++ Reference</strong></span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.w3.org/TR/html5/" target="_blank" class="link-item">
+                <span class="link-item-title">W3C HTML 5 Specification</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://www.w3.org/TR/1998/REC-html40-19980424/" target="_blank" class="link-item">
+                <span class="link-item-title">W3C HTML 4.0 Spec (Archive)</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="link-card" data-category="dev">
+          <div class="card-top">
+            <span class="card-category">■ 개발 도구 & 메뉴얼</span>
+            <span class="card-badge">Tools</span>
+          </div>
+          <ul class="link-list">
+            <li>
+              <a href="https://namu.wiki/w/%EC%9C%84%ED%82%A4" target="_blank" class="link-item">
+                <span class="link-item-title">나무위키 (Namu Wiki)</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://big-blog.tistory.com/1178" target="_blank" class="link-item">
+                <span class="link-item-title">Git SSH 상대경로 설정 팁</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://wiki.javajigi.net/display/IDE/Eclipse" target="_blank" class="link-item">
+                <span class="link-item-title">Eclipse 매뉴얼 (자바지기)</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://earth.google.com/" target="_blank" class="link-item">
+                <span class="link-item-title">Google Earth 위성 지도</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. PARA 아카이브 & 메모 (Projects, Areas, Resources, Archives) -->
+    <section class="section-block" id="sec-para">
+      <div class="section-header">
+        <h2 class="section-title"><span class="icon">📂</span> PARA 생산성 아카이브</h2>
+        <span class="section-desc">Projects, Areas, Resources, Archives 관리 영역</span>
+      </div>
+
+      <!-- Areas 명언 -->
+      <div class="quote-box">
+        <div class="quote-title">● Areas (삶의 영역과 철학)</div>
+        <p class="PyeongchangPeace" style="font-size: 1.05rem;">
+          "'무엇'이 옳기 때문에 옳다고 하는 것인지, 신들이 옳다고 하는 것이 옳은 것인지 ..."
+        </p>
+      </div>
+
+      <div class="cards-grid">
+        <!-- Projects 이모티콘 덱 -->
+        <div class="link-card" data-category="para">
+          <div class="card-top">
+            <span class="card-category">■ Projects (감정 표현 팔레트)</span>
+            <span class="card-badge">클릭 시 복사</span>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
+            원하는 이모티콘을 클릭하면 클립보드에 바로 복사됩니다:
+          </p>
+          <div class="emoticon-board">
+            <span class="emo-chip" onclick="copyText(this)">!(•̀ᴗ•́)و ̑̑</span>
+            <span class="emo-chip" onclick="copyText(this)">( ＾◡＾)っ ♡</span>
+            <span class="emo-chip" onclick="copyText(this)">(*≧∀≦*)</span>
+            <span class="emo-chip" onclick="copyText(this)">(^▽^)/</span>
+            <span class="emo-chip" onclick="copyText(this)">✧( •̀∀•́ )✧</span>
+            <span class="emo-chip" onclick="copyText(this)">(◕‿◕✿)</span>
+            <span class="emo-chip" onclick="copyText(this)">ヾ(o✪‿✪o)ｼ</span>
+            <span class="emo-chip" onclick="copyText(this)">(⋈◍＞◡＜◍)。✧♡</span>
+            <span class="emo-chip" onclick="copyText(this)">(๑◠ᗜ◠๑)</span>
+            <span class="emo-chip" onclick="copyText(this)">(-‿◦☀)</span>
+            <span class="emo-chip" onclick="copyText(this)">( * ´･з･` *)♪</span>
+            <span class="emo-chip" onclick="copyText(this)">( ͡ಥ‿ ಥ)━☆ﾟ.*･｡ﾟ</span>
+          </div>
+        </div>
+
+        <!-- Resources & 데코레이션 -->
+        <div class="link-card" data-category="para">
+          <div class="card-top">
+            <span class="card-category">■ Resources & UniCode Decor</span>
+            <span class="card-badge">리소스</span>
+          </div>
+          <ul class="link-list">
+            <li class="link-item" style="cursor: pointer;" onclick="copyText('🎀🍧 𝒩𝑒𝓫𝓊𝓁𝒶 🎀 🍧 by 𝒥𝓊𝓃𝑒 :: 🎀🍧 𝓣𝓻𝓲𝓯𝓲𝓭 𝓝𝓮𝓫𝓾𝓵𝓪 🎀 🍧')">
+              <span class="link-item-title">🎀🍧 𝒩𝑒𝓫𝓊𝓁𝒶 🎀 🍧</span>
+              <span class="link-tag">복사</span>
+            </li>
+            <li>
+              <a href="https://23log.tistory.com/81" target="_blank" class="link-item">
+                <span class="link-item-title">유니코드 웹폰트 적용 가이드</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.compart.com/en/unicode/U+1D4B6" target="_blank" class="link-item">
+                <span class="link-item-title">Compart Unicode Character DB</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Archives 레거시 보관함 -->
+        <div class="link-card" data-category="para">
+          <div class="card-top">
+            <span class="card-category">■ Archives (레거시 유틸)</span>
+            <span class="card-badge">보관함</span>
+          </div>
+          <ul class="link-list">
+            <li>
+              <a href="http://jwmx.tistory.com/" target="_blank" class="link-item">
+                <span class="link-item-title">jwmx (jwBrowser / jwFreeNote)</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://www.evernote.com" target="_blank" class="link-item">
+                <span class="link-item-title">Evernote 에버노트</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="http://www.iobit.com/advancedwindowscareper.html" target="_blank" class="link-item">
+                <span class="link-item-title">Advanced SystemCare</span>
+                <span class="link-ext-icon">↗</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 플로팅 탑 버튼 -->
+  <button type="button" class="floating-top" id="scrollTopBtn" title="맨 위로 이동">↑</button>
+
+  <!-- 토스트 피드백 -->
+  <div class="toast" id="toastBox">
+    <span>✅</span>
+    <span id="toastMsg">클립보드에 복사되었습니다!</span>
+  </div>
+
+  <!-- 푸터 -->
+  <footer>
+    <p class="CeraRound">Link Hub Portal 2026 &bull; Official Dashboard</p>
+    <p style="margin-top: 6px; font-size: 0.78rem;">
+      Last Updated: 2026.04 &bull; Designed with Pretendard, CeraRound & PyeongchangPeace
+    </p>
+  </footer>
+
+  <script>
+    // 1. 실시간 시계
+    function updateClock() {
+      const now = new Date();
+      const pad = n => String(n).padStart(2, '0');
+      const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+      document.getElementById('clockDisplay').textContent = timeStr;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // 2. 다크 / 라이트 테마 토글
+    const themeToggle = document.getElementById('themeToggle');
+    const htmlElem = document.documentElement;
+
+    // 로컬 스토리지에 저장된 테마 불러오기
+    const savedTheme = localStorage.getItem('linkhub_theme') || 'dark';
+    htmlElem.setAttribute('data-theme', savedTheme);
+    themeToggle.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+
+    themeToggle.addEventListener('click', () => {
+      const current = htmlElem.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      htmlElem.setAttribute('data-theme', next);
+      localStorage.setItem('linkhub_theme', next);
+      themeToggle.textContent = next === 'dark' ? '🌙' : '☀️';
+    });
+
+    // 3. 실시간 링크 검색 필터
+    const searchInput = document.getElementById('searchInput');
+    const cards = document.querySelectorAll('.link-card');
+    const noResults = document.getElementById('noResults');
+
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.trim().toLowerCase();
+      let hasVisible = false;
+
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        if (!query || text.includes(query)) {
+          card.style.display = 'flex';
+          hasVisible = true;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      noResults.style.display = hasVisible ? 'none' : 'block';
+    });
+
+    // 키보드 단축키 '/' 눌렀을 때 검색창 포커스
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement !== searchInput) {
+        e.preventDefault();
+        searchInput.focus();
+      }
+    });
+
+    // 4. 탭 내비게이션 스크롤 & 활성화
+    const tabs = document.querySelectorAll('.nav-tab');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        const targetId = tab.getAttribute('data-target');
+        if (targetId) {
+          const targetElem = document.getElementById(targetId);
+          if (targetElem) {
+            targetElem.scrollIntoView({ behavior: 'smooth' });
+          }
+        } else {
+          // 전체보기 클릭 시 맨 위로
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    });
+
+    // 5. 스크롤 탑 버튼
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        scrollTopBtn.style.display = 'flex';
+      } else {
+        scrollTopBtn.style.display = 'none';
+      }
+    });
+    scrollTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // 6. 텍스트 / 이모티콘 클립보드 복사
+    function copyText(target) {
+      const text = typeof target === 'string' ? target : target.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(`복사됨: "${text}"`);
+      }).catch(() => {
+        showToast('복사에 실패했습니다.');
+      });
+    }
+
+    // 토스트 팝업 함수
+    let toastTimer = null;
+    function showToast(msg) {
+      const toast = document.getElementById('toastBox');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.textContent = msg;
+      toast.classList.add('show');
+
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
